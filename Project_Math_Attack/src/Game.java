@@ -3,6 +3,7 @@ import java.util.Random;
  * This class represents Math Attack.
  *
  * @author Keith Tramm
+ * @version 3/20/2024
  */
 public class Game {
     /**
@@ -88,6 +89,10 @@ public class Game {
         myAnswer = Integer.toString(myOperationData[2]);
 
     }
+
+    /**
+     * resets the score, lives, streak, booleans, and operation data
+     */
     public void resetGameValues() {
         myScore = 0;
         myStreak = 0;
@@ -100,6 +105,10 @@ public class Game {
         isRunning = true;
         isQuestionSubmitted = false;
     }
+
+    /**
+     * game loop
+     */
     public void run() {
         update();
         while (isRunning) {
@@ -114,6 +123,9 @@ public class Game {
         }
     }
 
+    /**
+     * updates the JFrame and checks of the game has ended
+     */
     public void update() {
         if (myLives > 0) {
             updateGameValues();
@@ -122,6 +134,9 @@ public class Game {
         }
     }
 
+    /**
+     * sets the JFrame to the game over screen
+     */
     public void gameOverScreen() {
         myWindow.getQuestionLabel().setText("Game Over");
         myWindow.getScoreLabel().setVisible(false);
@@ -132,6 +147,10 @@ public class Game {
         myWindow.getExitButton().setVisible(true);
         myWindow.getPlayAgainButton().setVisible(true);
     }
+
+    /**
+     * resets screen to standard state
+     */
     public void resetScreen() {
         myWindow.getScoreLabel().setVisible(true);
         myWindow.getStreakLabel().setVisible(true);
@@ -141,6 +160,10 @@ public class Game {
         myWindow.getExitButton().setVisible(false);
         myWindow.getPlayAgainButton().setVisible(false);
     }
+
+    /**
+     * starts a new game of math attack
+     */
     public void newGame() {
         resetScreen();
         resetGameValues();
@@ -148,6 +171,10 @@ public class Game {
 
     }
 
+    /**
+     * randomly selects the operation data from the math generator
+     * @param theLastOperationData last operation to compare against new one
+     */
     public void selectOperationData(int[] theLastOperationData) {
         while (myOperationData == theLastOperationData) {
             switch (getRandomInteger(4, 1)) {
@@ -175,6 +202,9 @@ public class Game {
         }
     }
 
+    /**
+     * sets term, answer, and sign fields based on the operation data
+     */
     public void selectOperationSign() {
         if (myOperationData != null) {
             myFirstTerm = myOperationData[0];
@@ -196,6 +226,10 @@ public class Game {
             }
         }
     }
+
+    /**
+     * updates window labels to display new information in-game
+     */
     public void updateGameValues() {
         myWindow.getQuestionLabel().setText( myFirstTerm +
                 " " + mySign + " " + mySecondTerm + " = ?");
@@ -303,31 +337,65 @@ public class Game {
     }
 
     /**
-    * Toggles a flag indicating whether the game is over or not.
-    *
+    * Decrements the number of lives
     */
     public void decrementLives() {
         myLives--;
     }
+
+    /**
+     * gets a random integer from the given range
+     * @param theUpperBound top bound
+     * @param theLowerBound bottom bound
+     * @return the random integer
+     */
     public int getRandomInteger(int theUpperBound, int theLowerBound) {
         return myRandom.nextInt(theUpperBound) + theLowerBound;
     }
+
+    /**
+     * increases score by the given score amount
+     * @param theScoreAmount amount to increase by
+     */
     public void increaseScore(int theScoreAmount) {
         myScore += theScoreAmount;
     }
+
+    /**
+     * increments the answer streak
+     */
     public void incrementStreak() {
         myStreak++;
     }
+
+    /**
+     * sets isQuestionSubmitted field
+     * @param isQuestionSubmitted value to be set to
+     */
     public void setIsQuestionSubmitted(boolean isQuestionSubmitted) {
         this.isQuestionSubmitted = isQuestionSubmitted;
     }
+
+    /**
+     * set isRunning field
+     * @param isRunning value to be set to
+     */
     public void setIsRunning(boolean isRunning) {
         this.isRunning = isRunning;
     }
+
+    /**
+     * gets the Answer field
+     * @return the Answer field
+     */
     public String getAnswer() {
         return myAnswer;
     }
 
+    /**
+     * sets the window field
+     * @param theWindow value to be set to
+     */
     public void setWindow(GameWindow theWindow) {
         myWindow = theWindow;
     }

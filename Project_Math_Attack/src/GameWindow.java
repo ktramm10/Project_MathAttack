@@ -3,27 +3,80 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class that handles the game window and input events.
+ *
+ * @author Keith Tramm
+ *
+ * @version 3/20/2024
+ */
 public class GameWindow {
+    /**
+     * top level window
+     */
     private JFrame myFrame;
+    /**
+     * panel for the header
+     */
     private JPanel myHeaderPanel;
+    /**
+     * main panel
+     */
     private JPanel myMainPanel;
+    /**
+     * bottom most panel
+     */
     private JPanel myBottomPanel;
+    /**
+     * label for the question
+     */
     private JLabel myQuestionLabel;
+    /**
+     * label for the score
+     */
     private JLabel myScoreLabel;
+    /**
+     * label for the answer streak
+     */
     private JLabel myStreakLabel;
+    /**
+     * label for the lives count
+     */
     private JLabel myLivesLabel;
+    /**
+     * text field for the player input
+     */
     private JTextField myAnswerField;
+    /**
+     * button for submitting answers
+     */
     private JButton mySubmitButton;
+    /**
+     * button to exit the window
+     */
     private JButton myExitButton;
+    /**
+     * button to restart the game;
+     */
     private JButton myPlayAgainButton;
+    /**
+     * reference to the game instance
+     */
     private Game myGame;
+
+    /**
+     * Constructor to initialize window
+     * @param theGame reference to the game instance
+     */
 
     public GameWindow(Game theGame) {
         myGame = theGame;
         init();
-        initializePanels();
-        initializeComponents();
     }
+
+    /**
+     * initialize the window and its components
+     */
     private void init() {
         myFrame = new JFrame();
         myFrame.setSize(new Dimension(800, 700));
@@ -32,8 +85,14 @@ public class GameWindow {
         myFrame.setLocationRelativeTo(null);
 
         myFrame.setVisible(true);
+        initializePanels();
+        initializeComponents();
 
     }
+
+    /**
+     * initializes the window components
+     */
     public void initializeComponents() {
         createTextField();
         createLivesText();
@@ -45,6 +104,9 @@ public class GameWindow {
 
     }
 
+    /**
+     * initializes the streak label component
+     */
     private void createStreakText() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -55,6 +117,9 @@ public class GameWindow {
         myMainPanel.add(myStreakLabel, gbc);
     }
 
+    /**
+     * initializes the score label component
+     */
     private void createScoreText() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -65,6 +130,9 @@ public class GameWindow {
         myMainPanel.add(myScoreLabel, gbc);
     }
 
+    /**
+     * creates the lives counter label component
+     */
     private void createLivesText() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -76,6 +144,9 @@ public class GameWindow {
 
     }
 
+    /**
+     * creates the text field component
+     */
     private void createTextField() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -93,6 +164,9 @@ public class GameWindow {
 
     }
 
+    /**
+     * initializes and adds all three panels to the JFrame
+     */
     public void initializePanels() {
         myHeaderPanel = ComponentBuilder.createPanel(Color.WHITE,
                 BorderFactory.createMatteBorder(4, 4, 2, 4,
@@ -108,6 +182,9 @@ public class GameWindow {
         myFrame.add(myBottomPanel, BorderLayout.SOUTH);
 
     }
+    /**
+     * create the title label text component
+     */
     public void createTitle() {
         JLabel myTitleLabel = ComponentBuilder.createLabel("Math Attack",
                 SwingConstants.CENTER, SwingConstants.BOTTOM, new Font("Arial",
@@ -115,6 +192,10 @@ public class GameWindow {
         myHeaderPanel.add(myTitleLabel, BorderLayout.CENTER);
         myTitleLabel.setIcon(new ImageIcon("src/Deus_mathematics.png"));
     }
+
+    /**
+     * creates the question label component
+     */
     public void createQuestion() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 0, 30, 0);
@@ -125,6 +206,10 @@ public class GameWindow {
                         Font.BOLD, 40), 0);
         myMainPanel.add(myQuestionLabel, gbc);
     }
+
+    /**
+     * creates the submit, exit, amd play again buttons
+     */
     public void createButtons() {
         mySubmitButton = ComponentBuilder.createButton("Submit",
                 new Font("Arial", Font.BOLD,20), false);
@@ -152,24 +237,39 @@ public class GameWindow {
             initializeButtonActionListeners(mySubmitButton, myExitButton, myPlayAgainButton);
 
     }
-
+    /**
+     * implements each of the buttons functionality
+     * @param theSubmitButton submits and grades the input alters score, lives,
+     *        and streak
+     * @param theExitButton exits the game
+     * @param thePlayAgainButton resets game values and begins the game
+     */
     public void initializeButtonActionListeners(JButton theSubmitButton, JButton theExitButton, JButton thePlayAgainButton) {
         theSubmitButton.addActionListener(new ActionListener() {
+            /**
+             * Called when the submit button is clicked
+             * @param e the event to be processed
+             */
             public void actionPerformed(ActionEvent e) {
                 System.out.println(myAnswerField.getText());
                 if(myAnswerField.getText().equals(myGame.getAnswer())) {
+                    AudioPlayer.playAudio("src/Yippee.wav");
                     myGame.increaseScore(10);
                     myGame.incrementStreak();
                     myGame.setIsQuestionSubmitted(true);
                 } else {
+                    AudioPlayer.playAudio("src/WompWomp.wav");
                     myGame.decrementLives();
                     myGame.setStreak(0);
                     myGame.setIsQuestionSubmitted(true);
                 }
             }
         });
-
         theExitButton.addActionListener(new ActionListener() {
+            /**
+             * called when the exit button is clicked
+             * @param e the event to be processed
+             */
             public void actionPerformed(ActionEvent e) {
                 myGame.setIsRunning(false);
                 System.exit(0);
@@ -177,6 +277,10 @@ public class GameWindow {
         });
 
         thePlayAgainButton.addActionListener(new ActionListener() {
+            /**
+             * called when the play again button is clicked
+             * @param e the event to be processed
+             */
             public void actionPerformed(ActionEvent e) {
                 myGame.newGame();
             }
@@ -184,27 +288,67 @@ public class GameWindow {
 
 
     }
+
+    /**
+     * gets the question label
+     * @return question label
+     */
     public JLabel getQuestionLabel() {
         return myQuestionLabel;
     }
+
+    /**
+     * gets the score label
+     * @return Score label
+     */
     public JLabel getScoreLabel() {
         return myScoreLabel;
     }
+
+    /**
+     * gets the streak label
+     * @return streak label
+     */
     public JLabel getStreakLabel() {
         return myStreakLabel;
     }
+
+    /**
+     * gets the lives label
+     * @return lives label
+     */
     public JLabel getLivesLabel() {
         return myLivesLabel;
     }
+
+    /**
+     * gets the input text field
+     * @return input text field
+     */
     public JTextField getAnswerField() {
         return myAnswerField;
     }
+
+    /**
+     * gets the submit button
+     * @return submit button
+     */
     public JButton getSubmitButton() {
         return mySubmitButton;
     }
+
+    /**
+     * gets the exit button
+     * @return exit button
+     */
     public JButton getExitButton() {
         return myExitButton;
     }
+
+    /**
+     * gets the play again button
+     * @return play again button
+     */
     public JButton getPlayAgainButton() {
         return myPlayAgainButton;
     }

@@ -2,6 +2,7 @@ import java.util.Random;
 /**
  * A class that generates random math problems.
  * @author Keith Tramm
+ * @version 3/20/2024
  */
 public class MathGenerator {
 

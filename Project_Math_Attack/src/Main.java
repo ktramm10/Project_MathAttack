@@ -2,7 +2,10 @@ import java.util.Random;
 
 /**
  * Main class of the application.
+ *
  * @author Keith Tramm
+ *
+ * @version 3/20/2024
  */
 public class Main {
 
